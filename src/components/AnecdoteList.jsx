@@ -9,8 +9,7 @@ const AnecdoteList = () => {
     if (state.filter === '') {
       return state.anecdotes;
     }
-    return state.anecdotes.filter(anecdote => anecdote.content.includes(state.filter));
-  });
+    return state.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(state.filter.toLowerCase()));  });
   
 
   if (anecdotes) {
@@ -32,6 +31,7 @@ const AnecdoteList = () => {
             has {anecdote.votes}
             <button onClick={() => vote(anecdote.id)}>vote</button>
           </div>
+          <br />
         </div>
       ) : 'Loading...'}
     </div>
