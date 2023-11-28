@@ -21,6 +21,45 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    createAnecdote(state, action) {
+      const content = action.payload
+      state.push({
+        content,
+        id: getId(),
+        votes: 0
+      })
+    },
+    vote(state, action) {
+      const id = action.payload
+      const anecdoteToVote = state.find(n => n.id === id)
+      if (anecdoteToVote) {
+        anecdoteToVote.votes++
+      }
+    },
+  },
+})
+
+const notificationInitialState = ''
+
+const notificationSlice = createSlice({
+  name: 'notification',
+  initialState: notificationInitialState,
+  reducers: {
+    setNotification: (state, action) => action.payload,
+    clearNotification: () => notificationInitialState,
+  },
+})
+
+export const { createAnecdote, vote } = anecdoteSlice.actions
+export const { setNotification, clearNotification } = notificationSlice.actions
+export const notificationReducer = notificationSlice.reducer
+export default anecdoteSlice.reducer
+
+/*
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'VOTE':
@@ -40,7 +79,9 @@ const reducer = (state = initialState, action) => {
       return state
   }
 }
+*/
 
 
-
+/*
 export default reducer
+*/
