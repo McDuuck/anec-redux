@@ -6,10 +6,10 @@ const anecdoteSlice = createSlice({
   initialState: [],
   reducers: {
     vote(state, action) {
-      const id = action.payload
-      const anecdoteToVote = state.find(n => n.id === id)
+      const id = action.payload;
+      const anecdoteToVote = state.find(n => n.id === id);
       if (anecdoteToVote) {
-        anecdoteToVote.votes++
+        anecdoteToVote.votes += 1;
       }
     },
     appendAnecdotes(state, action) {
@@ -17,6 +17,13 @@ const anecdoteSlice = createSlice({
     },
     setAnecdotes(state, action) {
       return action.payload
+    },
+    updateAnecdote(state, action) {
+      const updatedAnecdote = action.payload;
+      const anecdoteToUpdate = state.find(n => n.id === updatedAnecdote.id);
+      if (anecdoteToUpdate) {
+        Object.assign(anecdoteToUpdate, updatedAnecdote);
+      }
     }
   },
 })
@@ -27,12 +34,14 @@ const notificationSlice = createSlice({
   name: 'notification',
   initialState: notificationInitialState,
   reducers: {
-    setNotification: (state, action) => action.payload,
+    setNotification: (state, action) => {
+      return action.payload
+    },
     clearNotification: () => notificationInitialState,
   },
 })
 
-export const { vote, appendAnecdotes, setAnecdotes } = anecdoteSlice.actions
+export const { vote, appendAnecdotes, setAnecdotes, updateAnecdote } = anecdoteSlice.actions
 export const { setNotification, clearNotification } = notificationSlice.actions
 export const notificationReducer = notificationSlice.reducer
 
@@ -50,6 +59,13 @@ export const createAnecdote = content => {
     dispatch(appendAnecdotes(newAnecdote))
   }
 }
+
+export const voteAnecdote = anecdote => {
+  return async dispatch => {
+    const updatedAnecdote = await anecdoteService.updateVote(anecdote);
+    dispatch(vote(updatedAnecdote));
+  };
+};
 
 
 export default anecdoteSlice.reducer

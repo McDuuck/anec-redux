@@ -13,4 +13,20 @@ const postNew = async (content) => {
     return response.data
 }
 
-export default { getAll, postNew }
+const updateVote = async (anecdote) => {
+    const updatedAnecdoteData = {
+        ...anecdote,
+        votes: anecdote.votes + 1
+    };
+    try {
+        const response = await axios.put(`${baseUrl}/${anecdote.id}`, updatedAnecdoteData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating anecdote:', error);
+    }
+};
+  
+  
+  
+
+export default { getAll, postNew, updateVote }
